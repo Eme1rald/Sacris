@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sacris Peur Development House</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        :root {
+            --bg-color: #f0f4f8;
+            --text-color: #333;
+            --accent-color: #4a90e2;
+        }
+
+        .theme-eye-care {
+            --bg-color: #f1e8d5;
+            --text-color: #5c4b37;
+            --accent-color: #8b7355;
+        }
+
+        .theme-sunny {
+            --bg-color: #f1e8d5;
+            --text-color: #ff6f00;
+            --accent-color: #ffd54f;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            transition: all 0.3s ease;
+        }
+
+        .section-card {
+            background-color: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .section-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+
+        .popup-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .popup-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .popup-content {
+            background-color: var(--bg-color);
+            padding: 2rem;
+            border-radius: 15px;
+            max-width: 80%;
+            max-height: 80%;
+            overflow-y: auto;
+            transform: scale(0.7);
+            opacity: 0;
+            transition: all 0.3s ease;
+        }
+
+        .popup-overlay.active .popup-content {
+            transform: scale(1);
+            opacity: 1;
+        }
+
+        .toggle-switch {
+            width: 60px;
+            height: 34px;
+            position: relative;
+            display: inline-block;
+        }
+
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 34px;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 26px;
+            width: 26px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+
+        input:checked + .slider {
+            background-color: var(--accent-color);
+        }
+
+        input:checked + .slider:before {
+            transform: translateX(26px);
+        }
+
+        .moving-note {
+            white-space: nowrap;
+            animation: moveLeftRight 20s linear infinite;
+        }
+
+        @keyframes moveLeftRight {
+            0% { transform: translateX(100%); }
+            100% { transform: translateX(-100%); }
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col">
+    <header class="bg-gray-800 text-white p-4">
+        <div class="container mx-auto flex justify-between items-center">
+            <h1 class="text-2xl font-bold">Sacris Peur Development House</h1>
+            <div class="flex items-center">
+                <span class="mr-2">Eye Care</span>
+                <label class="toggle-switch">
+                    <input type="checkbox" id="themeToggle">
+                    <span class="slider"></span>
+                </label>
+                <span class="ml-2">Sunny</span>
+            </div>
+        </div>
+    </header>
+
+    <main class="flex-grow container mx-auto p-8">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+            <div class="section-card p-6" data-section="audio">
+                <h2 class="text-xl font-semibold mb-4">Audio Files</h2>
+                <i class="fas fa-music text-4xl mb-4"></i>
+                <p>Access and manage your audio files here.</p>
+            </div>
+            <div class="section-card p-6" data-section="video">
+                <h2 class="text-xl font-semibold mb-4">Video Files</h2>
+                <i class="fas fa-video text-4xl mb-4"></i>
+                <p>Browse and organize your video collection.</p>
+            </div>
+            <div class="section-card p-6" data-section="pictures">
+                <h2 class="text-xl font-semibold mb-4">Pictures</h2>
+                <i class="fas fa-image text-4xl mb-4"></i>
+                <p>View and manage your image gallery.</p>
+            </div>
+            <div class="section-card p-6" data-section="pdf">
+                <h2 class="text-xl font-semibold mb-4">PDF Files</h2>
+                <i class="fas fa-file-pdf text-4xl mb-4"></i>
+                <p>Access and organize your PDF documents.</p>
+            </div>
+        </div>
+    </main>
+
+    <footer class="bg-gray-800 text-white p-8">
+        <div class="container mx-auto flex flex-col md:flex-row justify-between items-center">
+            <div class="mb-4 md:mb-0">
+                <h3 class="text-xl font-semibold mb-2">Sacris Peur</h3>
+                <p>Godliness + Contentment = A Great Gain</p>
+            </div>
+            <div class="flex space-x-4">
+                <a href="#" class="text-2xl"><i class="fab fa-facebook"></i></a>
+                <a href="#" class="text-2xl"><i class="fab fa-twitter"></i></a>
+                <a href="#" class="text-2xl"><i class="fab fa-instagram"></i></a>
+                <a href="#" class="text-2xl"><i class="fab fa-linkedin"></i></a>
+            </div>
+        </div>
+    </footer>
+
+    <div class="bg-gray-700 text-white p-2 overflow-hidden">
+        <p class="moving-note text-lg font-bold">BUILD YOURSELF FOR A GLORIOUS TOMORROW</p>
+    </div>
+
+    <div class="popup-overlay">
+        <div class="popup-content">
+            <h3 class="text-2xl font-semibold mb-4"></h3>
+            <ul class="list-disc pl-5"></ul>
+            <button class="mt-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" onclick="closePopup()">Close</button>
+        </div>
+    </div>
+
+    <script>
+        const themeToggle = document.getElementById('themeToggle');
+        const body = document.body;
+        const popupOverlay = document.querySelector('.popup-overlay');
+        const popupContent = document.querySelector('.popup-content');
+
+        themeToggle.addEventListener('change', function() {
+            if (this.checked) {
+                body.classList.remove('theme-eye-care');
+                body.classList.add('theme-sunny');
+            } else {
+                body.classList.remove('theme-sunny');
+                body.classList.add('theme-eye-care');
+            }
+        });
+
+        // Initialize with Eye Care theme
+        body.classList.add('theme-eye-care');
+
+        const sectionContent = {
+            audio: [
+                "Sermon: The Power of Faith",
+                "Worship Album: Heavenly Praises",
+                "Bible Study: Book of Psalms",
+                "Christian Meditation: Peace in His Presence",
+                "Podcast: Living a Christ-Centered Life"
+            ],
+            video: [
+                "Documentary: The Life of Jesus",
+                "Animated Series: Bible Stories for Kids",
+                "Worship Concert: Hillsong United Live",
+                "Christian Movie: The Case for Christ",
+                "Video Devotional: 30 Days with God"
+            ],
+            pictures: [
+                "Gallery: Holy Land Tour",
+                "Inspirational Quote Images",
+                "Christian Art Collection",
+                "Bible Verse Wallpapers",
+                "Church Events Photo Album"
+            ],
+            pdf: [
+                "E-book: Understanding the Bible",
+                "Bible Study Guide: Romans",
+                "Christian Living: Practical Faith",
+                "Devotional: 365 Days with God",
+                "Church History: From Acts to Modern Day"
+            ]
+        };
+
+        function openPopup(section) {
+            const title = popupContent.querySelector('h3');
+            const list = popupContent.querySelector('ul');
+            title.textContent = section.charAt(0).toUpperCase() + section.slice(1) + " Files";
+            list.innerHTML = sectionContent[section].map(item => `<li>${item}</li>`).join('');
+            popupOverlay.classList.add('active');
+        }
+
+        function closePopup() {
+            popupOverlay.classList.remove('active');
+        }
+
+        document.querySelectorAll('.section-card').forEach(card => {
+            card.addEventListener('click', () => {
+                const section = card.dataset.section;
+                openPopup(section);
+            });
+        });
+
+        popupOverlay.addEventListener('click', (e) => {
+            if (e.target === popupOverlay) {
+                closePopup();
+            }
+        });
+    </script>
+</body>
+</html>
